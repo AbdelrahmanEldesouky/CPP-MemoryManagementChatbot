@@ -21,7 +21,7 @@ ChatBot::ChatBot()
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
-    
+
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -44,6 +44,94 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+
+ChatBot::ChatBot(const ChatBot &other)
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+
+    _image = new wxBitmap(*other._image); 
+
+    _chatLogic = other._chatlogic;
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+}
+
+ChatBot::ChatBot &operator=(const ChatBot &other)
+{
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+
+    if(this == &other)
+    {
+        return *this;
+    }
+
+    // deallocate heap memory to save memory
+    if (_image != NULL)
+    {
+        delete _image;
+        _image = NULL;
+    }
+
+    _image = new wxBitmap(*other._image); 
+
+    _chatLogic = other._chatlogic;
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&other)
+{
+    std::cout << "ChatBot Move Constructor" << std::endl;
+
+    // deallocate heap memory to save memory
+    if (_image != NULL)
+    {
+        delete _image;
+        _image = NULL;
+    }
+
+    _image = other._image; 
+    _chatLogic = other._chatlogic;
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+
+    
+    other._image = NULL;
+    other._chatLogic = nullptr;
+    other._currentNode = nullptr;
+    other._rootNode = nullptr;
+}
+
+ChatBot::ChatBot &operator=(ChatBot &&other)
+{
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+
+    if(this == &other)
+    {
+        return *this;
+    }
+
+    // deallocate heap memory to save memory
+    if (_image != NULL)
+    {
+        delete _image;
+        _image = NULL;
+    }
+    _image = other._image; 
+    _chatLogic = other._chatlogic;
+    _currentNode = other._currentNode;
+    _rootNode = other._rootNode;
+
+    
+    other._image = NULL;
+    other._chatLogic = nullptr;
+    other._currentNode = nullptr;
+    other._rootNode = nullptr;
+
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
