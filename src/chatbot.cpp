@@ -51,12 +51,12 @@ ChatBot::ChatBot(const ChatBot &other)
 
     _image = new wxBitmap(*other._image); 
 
-    _chatLogic = other._chatlogic;
+    _chatLogic = other._chatLogic;
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
 }
 
-ChatBot::ChatBot &operator=(const ChatBot &other)
+ChatBot &ChatBot::operator=(const ChatBot &other)
 {
     std::cout << "ChatBot Copy Assignment Operator" << std::endl;
 
@@ -74,7 +74,7 @@ ChatBot::ChatBot &operator=(const ChatBot &other)
 
     _image = new wxBitmap(*other._image); 
 
-    _chatLogic = other._chatlogic;
+    _chatLogic = other._chatLogic;
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
 
@@ -85,26 +85,23 @@ ChatBot::ChatBot(ChatBot &&other)
 {
     std::cout << "ChatBot Move Constructor" << std::endl;
 
-    // deallocate heap memory to save memory
-    if (_image != NULL)
-    {
-        delete _image;
-        _image = NULL;
-    }
-
     _image = other._image; 
-    _chatLogic = other._chatlogic;
+    _chatLogic = other._chatLogic;
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
-
     
     other._image = NULL;
     other._chatLogic = nullptr;
     other._currentNode = nullptr;
     other._rootNode = nullptr;
+
+    // Set this ChatBot instance as the owner in ChatLogic
+    if (_chatLogic) {
+        _chatLogic->SetChatbotHandle(this);
+    }
 }
 
-ChatBot::ChatBot &operator=(ChatBot &&other)
+ChatBot &ChatBot::operator=(ChatBot &&other)
 {
     std::cout << "ChatBot Move Assignment Operator" << std::endl;
 
@@ -119,8 +116,9 @@ ChatBot::ChatBot &operator=(ChatBot &&other)
         delete _image;
         _image = NULL;
     }
+
     _image = other._image; 
-    _chatLogic = other._chatlogic;
+    _chatLogic = other._chatLogic;
     _currentNode = other._currentNode;
     _rootNode = other._rootNode;
 
@@ -129,6 +127,11 @@ ChatBot::ChatBot &operator=(ChatBot &&other)
     other._chatLogic = nullptr;
     other._currentNode = nullptr;
     other._rootNode = nullptr;
+
+    // Set this ChatBot instance as the owner in ChatLogic
+    if (_chatLogic) {
+        _chatLogic->SetChatbotHandle(this);
+    }
 
     return *this;
 }
